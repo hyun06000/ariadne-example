@@ -117,14 +117,21 @@ button.lchip:hover{border-color:var(--node);color:var(--node)}
 .mapstatus.s-dead{border-color:#ff6b6b;color:#ff6b6b}
 .mapstatus.s-pending{border-color:#ffd166;color:#ffd166}
 .mapstatus.s-open{border-color:var(--node);color:var(--node)}
-.maprow{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
-.maparrow{color:var(--dim);font-size:12px}
-.mapstep{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:3px 9px;background:var(--bg);color:var(--fg);cursor:pointer;font-family:inherit}
-.mapstep:hover{border-color:var(--node)}
-.mapstep .mk{color:var(--dim);font-size:10px}
-.mapstep.k-alive{border-color:#3ddc84}.mapstep.k-dead{border-color:#ff6b6b}.mapstep.k-pending{border-color:#ffd166}
-.mapstep.here{border-color:var(--here);border-width:2px}
-.mapstep .mhead{color:var(--here);font-weight:800;font-size:9px}
+/* 진짜 커밋 DAG(전체 스텝맵) */
+.dagwrap{overflow-x:auto;padding:4px 0 8px}
+svg.dag{display:block}
+.dag .dedge{stroke:var(--edge);stroke-width:2}
+.dag .dedge.branch{stroke:#ff6b6b;stroke-dasharray:5 4}
+.dag .dnode{cursor:pointer}
+.dag .dnode circle{fill:var(--card);stroke:var(--node);stroke-width:2}
+.dag .dnode .dsid{text-anchor:middle;font-size:11px;font-weight:700;fill:var(--fg)}
+.dag .dnode .dlabel{text-anchor:middle;font-size:9px;fill:var(--dim)}
+.dag .dnode.k-dead circle{stroke:#ff6b6b;fill:#ff6b6b22}.dag .dnode.k-dead .dsid{fill:#ff6b6b}
+.dag .dnode.k-alive.leaf circle{stroke:#3ddc84;stroke-width:3;fill:#3ddc8422}.dag .dnode.k-alive .dsid{fill:#3ddc84}
+.dag .dnode.k-pending circle{stroke:#ffd166}
+.dag .dnode.here circle{stroke:var(--here);stroke-width:3.5}
+.dag .dnode:hover circle{filter:brightness(1.25)}
+.hint .lg-branch{color:#ff6b6b}.hint .lg-dead{color:#ff6b6b}.hint .lg-alive{color:#3ddc84}
 .report{margin:10px 16px 16px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);
  border-radius:8px;font-size:13px;line-height:1.65;max-height:60vh;overflow:auto;word-break:break-word}
 /* 마크다운 렌더 */
@@ -146,10 +153,11 @@ button.lchip:hover{border-color:var(--node);color:var(--node)}
 </style></head><body>
 <header><h1>gil 그래프 뷰어 — 체인 그래프</h1>
 <span class="meta">체인 3개 · 스텝 15개 · 현재위치 0개 · <span class="meta">정적 스냅샷</span></span></header>
-<main><div class="tabs"><button id="tab-chain" class="tab on">체인 그래프</button><button id="tab-map">전체 스텝맵</button></div><div id="view-chain"><svg id="graph" viewBox="0 0 600 160" width="600" height="160"><g id="edges"><line class="edge" x1="70" y1="60" x2="280" y2="60"/><line class="edge" x1="280" y1="60" x2="490" y2="60"/></g><g id="nodes"><g class="cnode" data-chain="berkeley-dev" transform="translate(70,60)"><circle r="26"/><text class="cyc" dy="5">1</text><text class="clabel" dy="48">berkeley-dev</text></g><g class="cnode" data-chain="berkeley-staging" transform="translate(280,60)"><circle r="26"/><text class="cyc" dy="5">1</text><text class="clabel" dy="48">berkeley-staging</text></g><g class="cnode" data-chain="berkeley-deploy" transform="translate(490,60)"><circle r="26"/><text class="cyc" dy="5">1</text><text class="clabel" dy="48">berkeley-deploy</text></g></g></svg><p class="hint">동그라미 = 체인(숫자는 사이클 수), 선 = 계보(부모→자식). 주황 = 현재위치(스텝에선 <b>▼HEAD</b> 표시). <b>노드 클릭 → 사이클 카드.</b></p></div><div id="view-map" hidden></div><div id="card" hidden></div><div id="stepcard" hidden></div><div id="reportcard" hidden></div><script id="cycledata" type="application/json">{"berkeley-dev":{"x":70,"y":60,"cycles":[{"name":"c1","steps":9,"status":"success","here":false,"nodes":[{"id":"s1","kind":"define","outcome":"","parent":"null","backtrack":"","here":false,"sha":"6ab1b4f6435f92a4667ffe4c640405a40b59dfc8","subj":"gil berkeley-dev/c1/s1 define: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다","body":"gil berkeley-dev/c1/s1 define: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다"},{"id":"s2","kind":"define","outcome":"","parent":"s1","backtrack":"","here":false,"sha":"466e996e123a1163841c7879c4c9dcb975340fbe","subj":"gil berkeley-dev/c1/s2 define: 문제 정의: 성차별 검증, 두 관점","body":"gil berkeley-dev/c1/s2 define: 문제 정의: 성차별 검증, 두 관점\n\n# 문제 정의 — UC Berkeley 1973 입학에 성차별이 있었는가?\n\n## 무엇을 푸는가\n1973년 UC Berkeley 대학원 입학 데이터로 \"여성 지원자가 성별을 이유로 불리했는가?\"를 검증한다.\n\n## 입력 데이터 (`data/ucb_admissions.csv`)\n6개 학과(A–F) × 성별(Male/Female)의 합격/불합격 수. 총 12행.\n\n| 컬럼 | 의미 |\n|------|------|\n| Dept | 학과 A–F |\n| Gender | Male / Female |\n| Admitted | 합격 수 |\n| Rejected | 불합격 수 |\n\n## 평가 지표\n합격률 = Admitted / (Admitted + Rejected). 성별 간 격차를 본다.\n\n## 분석 관점 (두 갈래)\n- **관점 1 (집계)**: 성별 전체 합격률만 비교한다.\n- **관점 2 (층화)**: 학과별로 나눈 뒤 성별 합격률을 비교한다 (교란변수 통제).\n\n## 제약 / 주의\n학과는 잠재적 교란변수다. 지원 학과 분포가 성별로 다르면 집계 결과가 왜곡될 수 있다 (심슨의 역설 위험).\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: define\nGil-Parent: s1"},{"id":"s3","kind":"hypothesis","outcome":"","parent":"s2","backtrack":"","here":false,"sha":"3a1895f7ab3c2ae5970f964d727b587e02add809","subj":"gil berkeley-dev/c1/s3 hypothesis: H1: 전체 합격률이 낮다 = 성차별","body":"gil berkeley-dev/c1/s3 hypothesis: H1: 전체 합격률이 낮다 = 성차별\n\n# 가설 H1 — 전체 합격률 격차 = 성차별\n\n**주장**: 여성의 전체 합격률이 남성보다 유의하게 낮다면, 이는 입학 과정의 성차별 증거다.\n\n**검증 방법**: 성별로 합격/불합격을 전부 합산해 합격률을 비교한다. 학과는 무시한다.\n\n**기각 조건**: 만약 이 격차가 학과라는 교란변수로 설명된다면, H1은 인과(\"차별\")를 지지하지 못한다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s3\nGil-Kind: hypothesis\nGil-Parent: s2"},{"id":"s4","kind":"verify","outcome":"","parent":"s3","backtrack":"","here":false,"sha":"4352ed084a5d4701aa833ce423834f9b1f91746a","subj":"gil berkeley-dev/c1/s4 verify: V1: 여성 30.4% vs 남성 44.5% (집계)","body":"gil berkeley-dev/c1/s4 verify: V1: 여성 30.4% vs 남성 44.5% (집계)\n\n# 검증 V1 — 전체 집계 합격률\n\n`analysis.py` 집계 결과:\n\n| 성별 | 합격률 |\n|------|--------|\n| 여성 (Female) | **30.4%** |\n| 남성 (Male)   | **44.5%** |\n\n격차 = 14.1%p. 표면적으로 여성이 크게 불리해 보인다.\n\n```\nagg = df.groupby(\"Gender\").apply(lambda g: g.Admitted.sum()/g.Total.sum())\nFemale  0.304   Male  0.445\n```\n\n이 숫자만 보면 H1이 지지되는 듯하다. **그러나** 학과별 지원 분포를 아직 통제하지 않았다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s4\nGil-Kind: verify\nGil-Parent: s3"},{"id":"s5","kind":"fail","outcome":"","parent":"s4","backtrack":"s2","here":false,"sha":"f09840deb76fffb8ed0414be2a3a01fade5cc83e","subj":"gil berkeley-dev/c1/s5 fail: H1 기각: 학과 교란 무시 (죽은 잎)","body":"gil berkeley-dev/c1/s5 fail: H1 기각: 학과 교란 무시 (죽은 잎)\n\n# 기각 — H1은 교란변수(학과)를 무시했다 (죽은 잎)\n\n## 왜 기각하는가\n집계 격차(30.4% vs 44.5%)는 **인과가 아니다**. 학과별 지원 분포를 통제하지 않았다.\n\n관찰: 학과마다 합격률이 극단적으로 다르다.\n\n| 학과 | 전체 합격률 |\n|------|-------------|\n| A | 64.4% |\n| B | 63.2% |\n| C | 35.1% |\n| D | 34.0% |\n| E | 25.2% |\n| F | **6.4%** |\n\n그리고 성별 지원 분포가 학과별로 크게 쏠린다:\n\n| 학과 | 여성 지원 | 남성 지원 |\n|------|-----------|-----------|\n| A (쉬움) | 108 | **825** |\n| B (쉬움) | 25 | **560** |\n| C | **593** | 325 |\n| E | **393** | 191 |\n| F (어려움) | 341 | 373 |\n\n남성은 합격률 높은 A·B에 몰렸고, 여성은 경쟁 심한 C·E·F에 몰렸다. 집계 격차는\n**\"여성이 어려운 학과에 더 많이 지원했다\"**는 자기선택으로 상당 부분 설명된다.\n\n## 결론\nH1(집계 격차 = 성차별)은 교란을 통제하지 못한 잘못된 추론. **기각 → 조상 define(s2)으로 backtrack.**\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s5\nGil-Kind: fail\nGil-Parent: s4\nGil-Backtrack: s2"},{"id":"s6","kind":"hypothesis","outcome":"","parent":"s2","backtrack":"","here":false,"sha":"a14fd460fcb26b0c16b16b92f160933afa81dab1","subj":"gil berkeley-dev/c1/s6 hypothesis: H2: 학과 층화 시 격차 역전 (backtrack)","body":"gil berkeley-dev/c1/s6 hypothesis: H2: 학과 층화 시 격차 역전 (backtrack)\n\n# 가설 H2 (backtrack) — 학과로 층화하면 격차가 사라지거나 역전된다\n\n조상 define(s2)로 되돌아와 새 가지를 뻗는다. H1의 실패에서 배운 것: 학과를 통제해야 한다.\n\n**주장**: 학과별로 층화해 성별 합격률을 비교하면, 여성이 불리하지 않다 —\n오히려 다수 학과에서 여성 합격률이 더 높다 (심슨의 역설).\n\n**검증 방법**: 6개 학과 각각에서 여성/남성 합격률을 계산하고, 여성 > 남성인 학과 수를 센다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s6\nGil-Kind: hypothesis\nGil-Parent: s2"},{"id":"s7","kind":"verify","outcome":"","parent":"s6","backtrack":"","here":false,"sha":"d37cb6e0539285e37ff7419f79da4983dc7dbbbe","subj":"gil berkeley-dev/c1/s7 verify: V2: 6개 중 4개 학과 여성 합격률이 더 높다","body":"gil berkeley-dev/c1/s7 verify: V2: 6개 중 4개 학과 여성 합격률이 더 높다\n\n# 검증 V2 — 학과별 층화 합격률\n\n`analysis.py` 층화 결과:\n\n| 학과 | 여성 합격률 | 남성 합격률 | 여성 우위? |\n|------|-------------|-------------|-----------|\n| A | **82.4%** | 62.1% | ✅ |\n| B | **68.0%** | 63.0% | ✅ |\n| C | 34.1% | 36.9% | ❌ |\n| D | **34.9%** | 33.1% | ✅ |\n| E | 23.9% | 27.7% | ❌ |\n| F | **7.0%** | 5.9% | ✅ |\n\n**6개 학과 중 4개에서 여성 합격률이 더 높다.** 남성이 우위인 C·E조차 격차는 작다(2~4%p).\n반면 여성 우위인 A는 20%p 이상 차이.\n\n집계에서 여성이 불리해 보인 이유: 여성이 합격률 낮은 학과(C·E·F)에 집중 지원했기 때문 —\n차별이 아니라 **지원 학과 선택의 차이**.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s7\nGil-Kind: verify\nGil-Parent: s6"},{"id":"s8","kind":"analyze","outcome":"","parent":"s7","backtrack":"","here":false,"sha":"404d2f9e783d33b9d2865d7cde84655af4e6657e","subj":"gil berkeley-dev/c1/s8 analyze: 심슨의 역설: 집계와 층화가 반대 방향","body":"gil berkeley-dev/c1/s8 analyze: 심슨의 역설: 집계와 층화가 반대 방향\n\n# 해석 — 심슨의 역설 (Simpson's Paradox)\n\n## 무슨 일이 일어났나\n- **집계**: 여성 30.4% < 남성 44.5% (여성 불리)\n- **층화**: 6개 중 4개 학과에서 여성 ≥ 남성 (여성 불리 아님)\n\n방향이 뒤집힌다. 이것이 교과서적 **심슨의 역설**이다.\n\n## 메커니즘\n합격률과 지원 성비가 학과와 동시에 상관된다.\n- 남성은 합격률 높은 A(64%)·B(63%)에 대량 지원(825, 560명).\n- 여성은 합격률 낮은 C(35%)·E(25%)·F(6%)에 집중 지원.\n\n집계는 이 지원 분포 차이를 \"성별 효과\"로 오인한다. 학과를 통제하면 사라진다.\n\n## 결론\n\"입학 과정이 여성을 차별했다\"는 집계 근거는 성립하지 않는다. 데이터가 시사하는 것은\n차별이 아니라 **여성이 경쟁이 치열한 학과에 더 많이 지원했다**는 구조적 사실이다.\n(이는 Bickel et al., Science 1975의 유명한 재해석과 일치한다.)\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s8\nGil-Kind: analyze\nGil-Parent: s7"},{"id":"s9","kind":"success","outcome":"","parent":"s8","backtrack":"","here":false,"sha":"b2969c4014bbfb370530998723d9e24cbe5e04da","subj":"gil berkeley-dev/c1/s9 success: H2 지지: 심슨의 역설 (산 잎)","body":"gil berkeley-dev/c1/s9 success: H2 지지: 심슨의 역설 (산 잎)\n\n# 산 잎 — H2 지지: 성차별 아님, 심슨의 역설\n\n## 검증된 결론\nUC Berkeley 1973 입학의 집계 성별 격차(30.4% vs 44.5%)는 **성차별의 증거가 아니다.**\n학과로 층화하면 6개 중 4개에서 여성 합격률이 더 높다. 이는 심슨의 역설이며, 격차의\n원인은 지원 학과 분포 차이다.\n\n## 두 관점 요약\n| | 여성 | 남성 | 해석 |\n|---|---|---|---|\n| 집계 | 30.4% | 44.5% | 표면상 여성 불리 |\n| 층화 (4/6 학과) | ≥ | | 여성 불리 아님 |\n\n## 재현\n`python3 analysis.py` 로 위 모든 수치 재현 가능.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s9\nGil-Kind: success\nGil-Parent: s8"}]}]},"berkeley-staging":{"x":280,"y":60,"cycles":[{"name":"c1","steps":4,"status":"success","here":false,"nodes":[{"id":"s1","kind":"define","outcome":"","parent":"null","backtrack":"","here":false,"sha":"149952af5469530c292b1426d0eaa22093c5b882","subj":"gil berkeley-staging/c1/s1 define: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현","body":"gil berkeley-staging/c1/s1 define: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현"},{"id":"s2","kind":"hypothesis","outcome":"","parent":"s1","backtrack":"","here":false,"sha":"1f70dec453f41c78b88efbe8a56e77dd3448871d","subj":"gil berkeley-staging/c1/s2 hypothesis: 대형 학과 유의성 검정으로 견고성 확인","body":"gil berkeley-staging/c1/s2 hypothesis: 대형 학과 유의성 검정으로 견고성 확인\n\n# 가설 — 대형 학과에서 역설이 재현되고, 여성 불리는 통계적으로 없다\n\ndev에서 나온 \"여성 불리 아님\" 결론이 표본 잡음이 아닌지, 지원자 수가 많은 대형 학과\n(A: 933명, C: 918명, B: 585명)에서 two-proportion z-test로 엄밀히 확인한다.\n\n**기대**: 여성이 유의하게 불리한 학과는 없다. 오히려 A에서 여성이 유의하게 우위.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: hypothesis\nGil-Parent: s1"},{"id":"s3","kind":"verify","outcome":"","parent":"s2","backtrack":"","here":false,"sha":"763d1f482da528bc30f51673477e2b051efa58f7","subj":"gil berkeley-staging/c1/s3 verify: z-test: 여성 불리 유의 학과 0개, A는 여성 유의 우위","body":"gil berkeley-staging/c1/s3 verify: z-test: 여성 불리 유의 학과 0개, A는 여성 유의 우위\n\n# 검증 — Two-proportion z-test (여성 − 남성)\n\n`analysis.py`의 검정 확장. 대형 학과 A·B·C:\n\n| 학과 | 여성 (n) | 남성 (n) | z (F−M) | 유의성 |\n|------|----------|----------|---------|--------|\n| A | 82.4% (108) | 62.1% (825) | **+4.15** | 여성 유의 우위 (p<0.0001) |\n| B | 68.0% (25)  | 63.0% (560) | +0.50 | 차이 없음 |\n| C | 34.1% (593) | 36.9% (325) | −0.87 | 차이 없음 (유의하지 않음) |\n\n**여성이 유의하게 불리한 대형 학과는 없다.** 가장 큰 효과는 A의 *여성 우위*(+20%p, 강한 유의).\nC의 남성 근소 우위(−2.8%p)는 통계적으로 유의하지 않다 → 차별 근거 아님.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s3\nGil-Kind: verify\nGil-Parent: s2"},{"id":"s4","kind":"success","outcome":"","parent":"s3","backtrack":"","here":false,"sha":"8b7b439bf47ef145ca276304d4c99cfa68238e53","subj":"gil berkeley-staging/c1/s4 success: 견고성 확인: 배포 가능 (산 잎)","body":"gil berkeley-staging/c1/s4 success: 견고성 확인: 배포 가능 (산 잎)\n\n# 산 잎 — 결론 견고성 확인 (필드테스트 통과)\n\ndev 결론이 대형 학과 통계 검정에서 재현·강화됐다:\n- 여성이 **유의하게 불리한** 학과: **없음**.\n- Dept A: 여성 +20.3%p, z=+4.15 (강한 유의) — 오히려 여성 우위.\n- 집계 격차는 학과 지원 분포의 교란(심슨의 역설)으로 확정.\n\n결론은 스테이징(엄밀 검증)을 통과. 배포 가능.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s4\nGil-Kind: success\nGil-Parent: s3"}]}]},"berkeley-deploy":{"x":490,"y":60,"cycles":[{"name":"c1","steps":2,"status":"success","here":false,"nodes":[{"id":"s1","kind":"define","outcome":"","parent":"null","backtrack":"","here":false,"sha":"d845736424b3982861d41e7c1b148f57ae5560e2","subj":"gil berkeley-deploy/c1/s1 define: 최종 리포트 봉인","body":"gil berkeley-deploy/c1/s1 define: 최종 리포트 봉인\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-deploy\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 최종 리포트 봉인"},{"id":"s2","kind":"success","outcome":"","parent":"s1","backtrack":"","here":false,"sha":"f2e332df761b42ccc1c9155a5309b1510a0a4b8c","subj":"gil berkeley-deploy/c1/s2 success: 최종 리포트 봉인: 재현 가능 (산 잎)","body":"gil berkeley-deploy/c1/s2 success: 최종 리포트 봉인: 재현 가능 (산 잎)\n\n# 최종 리포트 (봉인) — UC Berkeley 1973 입학과 심슨의 역설\n\n## 질문\n\"입학 과정이 여성을 차별했는가?\"\n\n## 답\n**아니다.** 집계 격차는 심슨의 역설이며, 학과 지원 분포 차이로 설명된다.\n\n## 근거 요약\n| 관점 | 여성 | 남성 | 판정 |\n|------|------|------|------|\n| 집계 합격률 | 30.4% | 44.5% | 표면상 여성 불리 |\n| 학과 층화 (4/6 학과) | 여성 ≥ 남성 | | 여성 불리 아님 |\n| 대형 학과 A z-test | 82.4% | 62.1% (z=+4.15) | 여성 유의 우위 |\n| 여성 유의 불리 학과 | — | — | **0개** |\n\n## 메커니즘\n남성은 합격률 높은 A(64%)·B(63%)에, 여성은 낮은 C(35%)·E(25%)·F(6%)에 집중 지원.\n집계는 이 자기선택을 성별 효과로 오인한다.\n\n## 재현\n```\npython3 analysis.py   # 모든 수치 재생성\n```\n데이터: `data/ucb_admissions.csv` · 그래프: `graph.html`\n\n*(Bickel, Hammel & O'Connell, Science 1975 재해석과 일치.)*\n\nGil-Chain: berkeley-deploy\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: success\nGil-Parent: s1"}]}]}}</script><script id="parentdata" type="application/json">{"berkeley-deploy":"berkeley-staging","berkeley-staging":"berkeley-dev"}</script></main><script>
+<main><div class="tabs"><button id="tab-chain" class="tab on">체인 그래프</button><button id="tab-map">전체 스텝맵</button></div><div id="view-chain"><svg id="graph" viewBox="0 0 600 160" width="600" height="160"><g id="edges"><line class="edge" x1="70" y1="60" x2="280" y2="60"/><line class="edge" x1="280" y1="60" x2="490" y2="60"/></g><g id="nodes"><g class="cnode" data-chain="berkeley-dev" transform="translate(70,60)"><circle r="26"/><text class="cyc" dy="5">1</text><text class="clabel" dy="48">berkeley-dev</text></g><g class="cnode" data-chain="berkeley-staging" transform="translate(280,60)"><circle r="26"/><text class="cyc" dy="5">1</text><text class="clabel" dy="48">berkeley-staging</text></g><g class="cnode" data-chain="berkeley-deploy" transform="translate(490,60)"><circle r="26"/><text class="cyc" dy="5">1</text><text class="clabel" dy="48">berkeley-deploy</text></g></g></svg><p class="hint">동그라미 = 체인(숫자는 사이클 수), 선 = 계보(부모→자식). 주황 = 현재위치(스텝에선 <b>▼HEAD</b> 표시). <b>노드 클릭 → 사이클 카드.</b></p></div><div id="view-map" hidden></div><div id="card" hidden></div><div id="stepcard" hidden></div><div id="reportcard" hidden></div><script id="cycledata" type="application/json">{"berkeley-dev":{"x":70,"y":60,"cycles":[{"name":"c1","steps":9,"status":"success","here":false,"nodes":[{"id":"s1","kind":"define","outcome":"","parent":"null","backtrack":"","here":false,"sha":"6ab1b4f6435f92a4667ffe4c640405a40b59dfc8","subj":"gil berkeley-dev/c1/s1 define: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다","body":"gil berkeley-dev/c1/s1 define: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다"},{"id":"s2","kind":"define","outcome":"","parent":"s1","backtrack":"","here":false,"sha":"466e996e123a1163841c7879c4c9dcb975340fbe","subj":"gil berkeley-dev/c1/s2 define: 문제 정의: 성차별 검증, 두 관점","body":"gil berkeley-dev/c1/s2 define: 문제 정의: 성차별 검증, 두 관점\n\n# 문제 정의 — UC Berkeley 1973 입학에 성차별이 있었는가?\n\n## 무엇을 푸는가\n1973년 UC Berkeley 대학원 입학 데이터로 \"여성 지원자가 성별을 이유로 불리했는가?\"를 검증한다.\n\n## 입력 데이터 (`data/ucb_admissions.csv`)\n6개 학과(A–F) × 성별(Male/Female)의 합격/불합격 수. 총 12행.\n\n| 컬럼 | 의미 |\n|------|------|\n| Dept | 학과 A–F |\n| Gender | Male / Female |\n| Admitted | 합격 수 |\n| Rejected | 불합격 수 |\n\n## 평가 지표\n합격률 = Admitted / (Admitted + Rejected). 성별 간 격차를 본다.\n\n## 분석 관점 (두 갈래)\n- **관점 1 (집계)**: 성별 전체 합격률만 비교한다.\n- **관점 2 (층화)**: 학과별로 나눈 뒤 성별 합격률을 비교한다 (교란변수 통제).\n\n## 제약 / 주의\n학과는 잠재적 교란변수다. 지원 학과 분포가 성별로 다르면 집계 결과가 왜곡될 수 있다 (심슨의 역설 위험).\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: define\nGil-Parent: s1"},{"id":"s3","kind":"hypothesis","outcome":"","parent":"s2","backtrack":"","here":false,"sha":"3a1895f7ab3c2ae5970f964d727b587e02add809","subj":"gil berkeley-dev/c1/s3 hypothesis: H1: 전체 합격률이 낮다 = 성차별","body":"gil berkeley-dev/c1/s3 hypothesis: H1: 전체 합격률이 낮다 = 성차별\n\n# 가설 H1 — 전체 합격률 격차 = 성차별\n\n**주장**: 여성의 전체 합격률이 남성보다 유의하게 낮다면, 이는 입학 과정의 성차별 증거다.\n\n**검증 방법**: 성별로 합격/불합격을 전부 합산해 합격률을 비교한다. 학과는 무시한다.\n\n**기각 조건**: 만약 이 격차가 학과라는 교란변수로 설명된다면, H1은 인과(\"차별\")를 지지하지 못한다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s3\nGil-Kind: hypothesis\nGil-Parent: s2"},{"id":"s4","kind":"verify","outcome":"","parent":"s3","backtrack":"","here":false,"sha":"4352ed084a5d4701aa833ce423834f9b1f91746a","subj":"gil berkeley-dev/c1/s4 verify: V1: 여성 30.4% vs 남성 44.5% (집계)","body":"gil berkeley-dev/c1/s4 verify: V1: 여성 30.4% vs 남성 44.5% (집계)\n\n# 검증 V1 — 전체 집계 합격률\n\n`analysis.py` 집계 결과:\n\n| 성별 | 합격률 |\n|------|--------|\n| 여성 (Female) | **30.4%** |\n| 남성 (Male)   | **44.5%** |\n\n격차 = 14.1%p. 표면적으로 여성이 크게 불리해 보인다.\n\n```\nagg = df.groupby(\"Gender\").apply(lambda g: g.Admitted.sum()/g.Total.sum())\nFemale  0.304   Male  0.445\n```\n\n이 숫자만 보면 H1이 지지되는 듯하다. **그러나** 학과별 지원 분포를 아직 통제하지 않았다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s4\nGil-Kind: verify\nGil-Parent: s3"},{"id":"s5","kind":"fail","outcome":"","parent":"s4","backtrack":"s2","here":false,"sha":"f09840deb76fffb8ed0414be2a3a01fade5cc83e","subj":"gil berkeley-dev/c1/s5 fail: H1 기각: 학과 교란 무시 (죽은 잎)","body":"gil berkeley-dev/c1/s5 fail: H1 기각: 학과 교란 무시 (죽은 잎)\n\n# 기각 — H1은 교란변수(학과)를 무시했다 (죽은 잎)\n\n## 왜 기각하는가\n집계 격차(30.4% vs 44.5%)는 **인과가 아니다**. 학과별 지원 분포를 통제하지 않았다.\n\n관찰: 학과마다 합격률이 극단적으로 다르다.\n\n| 학과 | 전체 합격률 |\n|------|-------------|\n| A | 64.4% |\n| B | 63.2% |\n| C | 35.1% |\n| D | 34.0% |\n| E | 25.2% |\n| F | **6.4%** |\n\n그리고 성별 지원 분포가 학과별로 크게 쏠린다:\n\n| 학과 | 여성 지원 | 남성 지원 |\n|------|-----------|-----------|\n| A (쉬움) | 108 | **825** |\n| B (쉬움) | 25 | **560** |\n| C | **593** | 325 |\n| E | **393** | 191 |\n| F (어려움) | 341 | 373 |\n\n남성은 합격률 높은 A·B에 몰렸고, 여성은 경쟁 심한 C·E·F에 몰렸다. 집계 격차는\n**\"여성이 어려운 학과에 더 많이 지원했다\"**는 자기선택으로 상당 부분 설명된다.\n\n## 결론\nH1(집계 격차 = 성차별)은 교란을 통제하지 못한 잘못된 추론. **기각 → 조상 define(s2)으로 backtrack.**\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s5\nGil-Kind: fail\nGil-Parent: s4\nGil-Backtrack: s2"},{"id":"s6","kind":"hypothesis","outcome":"","parent":"s2","backtrack":"","here":false,"sha":"a14fd460fcb26b0c16b16b92f160933afa81dab1","subj":"gil berkeley-dev/c1/s6 hypothesis: H2: 학과 층화 시 격차 역전 (backtrack)","body":"gil berkeley-dev/c1/s6 hypothesis: H2: 학과 층화 시 격차 역전 (backtrack)\n\n# 가설 H2 (backtrack) — 학과로 층화하면 격차가 사라지거나 역전된다\n\n조상 define(s2)로 되돌아와 새 가지를 뻗는다. H1의 실패에서 배운 것: 학과를 통제해야 한다.\n\n**주장**: 학과별로 층화해 성별 합격률을 비교하면, 여성이 불리하지 않다 —\n오히려 다수 학과에서 여성 합격률이 더 높다 (심슨의 역설).\n\n**검증 방법**: 6개 학과 각각에서 여성/남성 합격률을 계산하고, 여성 > 남성인 학과 수를 센다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s6\nGil-Kind: hypothesis\nGil-Parent: s2"},{"id":"s7","kind":"verify","outcome":"","parent":"s6","backtrack":"","here":false,"sha":"d37cb6e0539285e37ff7419f79da4983dc7dbbbe","subj":"gil berkeley-dev/c1/s7 verify: V2: 6개 중 4개 학과 여성 합격률이 더 높다","body":"gil berkeley-dev/c1/s7 verify: V2: 6개 중 4개 학과 여성 합격률이 더 높다\n\n# 검증 V2 — 학과별 층화 합격률\n\n`analysis.py` 층화 결과:\n\n| 학과 | 여성 합격률 | 남성 합격률 | 여성 우위? |\n|------|-------------|-------------|-----------|\n| A | **82.4%** | 62.1% | ✅ |\n| B | **68.0%** | 63.0% | ✅ |\n| C | 34.1% | 36.9% | ❌ |\n| D | **34.9%** | 33.1% | ✅ |\n| E | 23.9% | 27.7% | ❌ |\n| F | **7.0%** | 5.9% | ✅ |\n\n**6개 학과 중 4개에서 여성 합격률이 더 높다.** 남성이 우위인 C·E조차 격차는 작다(2~4%p).\n반면 여성 우위인 A는 20%p 이상 차이.\n\n집계에서 여성이 불리해 보인 이유: 여성이 합격률 낮은 학과(C·E·F)에 집중 지원했기 때문 —\n차별이 아니라 **지원 학과 선택의 차이**.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s7\nGil-Kind: verify\nGil-Parent: s6"},{"id":"s8","kind":"analyze","outcome":"","parent":"s7","backtrack":"","here":false,"sha":"404d2f9e783d33b9d2865d7cde84655af4e6657e","subj":"gil berkeley-dev/c1/s8 analyze: 심슨의 역설: 집계와 층화가 반대 방향","body":"gil berkeley-dev/c1/s8 analyze: 심슨의 역설: 집계와 층화가 반대 방향\n\n# 해석 — 심슨의 역설 (Simpson's Paradox)\n\n## 무슨 일이 일어났나\n- **집계**: 여성 30.4% < 남성 44.5% (여성 불리)\n- **층화**: 6개 중 4개 학과에서 여성 ≥ 남성 (여성 불리 아님)\n\n방향이 뒤집힌다. 이것이 교과서적 **심슨의 역설**이다.\n\n## 메커니즘\n합격률과 지원 성비가 학과와 동시에 상관된다.\n- 남성은 합격률 높은 A(64%)·B(63%)에 대량 지원(825, 560명).\n- 여성은 합격률 낮은 C(35%)·E(25%)·F(6%)에 집중 지원.\n\n집계는 이 지원 분포 차이를 \"성별 효과\"로 오인한다. 학과를 통제하면 사라진다.\n\n## 결론\n\"입학 과정이 여성을 차별했다\"는 집계 근거는 성립하지 않는다. 데이터가 시사하는 것은\n차별이 아니라 **여성이 경쟁이 치열한 학과에 더 많이 지원했다**는 구조적 사실이다.\n(이는 Bickel et al., Science 1975의 유명한 재해석과 일치한다.)\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s8\nGil-Kind: analyze\nGil-Parent: s7"},{"id":"s9","kind":"success","outcome":"","parent":"s8","backtrack":"","here":false,"sha":"b2969c4014bbfb370530998723d9e24cbe5e04da","subj":"gil berkeley-dev/c1/s9 success: H2 지지: 심슨의 역설 (산 잎)","body":"gil berkeley-dev/c1/s9 success: H2 지지: 심슨의 역설 (산 잎)\n\n# 산 잎 — H2 지지: 성차별 아님, 심슨의 역설\n\n## 검증된 결론\nUC Berkeley 1973 입학의 집계 성별 격차(30.4% vs 44.5%)는 **성차별의 증거가 아니다.**\n학과로 층화하면 6개 중 4개에서 여성 합격률이 더 높다. 이는 심슨의 역설이며, 격차의\n원인은 지원 학과 분포 차이다.\n\n## 두 관점 요약\n| | 여성 | 남성 | 해석 |\n|---|---|---|---|\n| 집계 | 30.4% | 44.5% | 표면상 여성 불리 |\n| 층화 (4/6 학과) | ≥ | | 여성 불리 아님 |\n\n## 재현\n`python3 analysis.py` 로 위 모든 수치 재현 가능.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s9\nGil-Kind: success\nGil-Parent: s8"}]}]},"berkeley-staging":{"x":280,"y":60,"cycles":[{"name":"c1","steps":4,"status":"success","here":false,"nodes":[{"id":"s1","kind":"define","outcome":"","parent":"null","backtrack":"","here":false,"sha":"149952af5469530c292b1426d0eaa22093c5b882","subj":"gil berkeley-staging/c1/s1 define: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현","body":"gil berkeley-staging/c1/s1 define: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현"},{"id":"s2","kind":"hypothesis","outcome":"","parent":"s1","backtrack":"","here":false,"sha":"1f70dec453f41c78b88efbe8a56e77dd3448871d","subj":"gil berkeley-staging/c1/s2 hypothesis: 대형 학과 유의성 검정으로 견고성 확인","body":"gil berkeley-staging/c1/s2 hypothesis: 대형 학과 유의성 검정으로 견고성 확인\n\n# 가설 — 대형 학과에서 역설이 재현되고, 여성 불리는 통계적으로 없다\n\ndev에서 나온 \"여성 불리 아님\" 결론이 표본 잡음이 아닌지, 지원자 수가 많은 대형 학과\n(A: 933명, C: 918명, B: 585명)에서 two-proportion z-test로 엄밀히 확인한다.\n\n**기대**: 여성이 유의하게 불리한 학과는 없다. 오히려 A에서 여성이 유의하게 우위.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: hypothesis\nGil-Parent: s1"},{"id":"s3","kind":"verify","outcome":"","parent":"s2","backtrack":"","here":false,"sha":"763d1f482da528bc30f51673477e2b051efa58f7","subj":"gil berkeley-staging/c1/s3 verify: z-test: 여성 불리 유의 학과 0개, A는 여성 유의 우위","body":"gil berkeley-staging/c1/s3 verify: z-test: 여성 불리 유의 학과 0개, A는 여성 유의 우위\n\n# 검증 — Two-proportion z-test (여성 − 남성)\n\n`analysis.py`의 검정 확장. 대형 학과 A·B·C:\n\n| 학과 | 여성 (n) | 남성 (n) | z (F−M) | 유의성 |\n|------|----------|----------|---------|--------|\n| A | 82.4% (108) | 62.1% (825) | **+4.15** | 여성 유의 우위 (p<0.0001) |\n| B | 68.0% (25)  | 63.0% (560) | +0.50 | 차이 없음 |\n| C | 34.1% (593) | 36.9% (325) | −0.87 | 차이 없음 (유의하지 않음) |\n\n**여성이 유의하게 불리한 대형 학과는 없다.** 가장 큰 효과는 A의 *여성 우위*(+20%p, 강한 유의).\nC의 남성 근소 우위(−2.8%p)는 통계적으로 유의하지 않다 → 차별 근거 아님.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s3\nGil-Kind: verify\nGil-Parent: s2"},{"id":"s4","kind":"success","outcome":"","parent":"s3","backtrack":"","here":false,"sha":"8b7b439bf47ef145ca276304d4c99cfa68238e53","subj":"gil berkeley-staging/c1/s4 success: 견고성 확인: 배포 가능 (산 잎)","body":"gil berkeley-staging/c1/s4 success: 견고성 확인: 배포 가능 (산 잎)\n\n# 산 잎 — 결론 견고성 확인 (필드테스트 통과)\n\ndev 결론이 대형 학과 통계 검정에서 재현·강화됐다:\n- 여성이 **유의하게 불리한** 학과: **없음**.\n- Dept A: 여성 +20.3%p, z=+4.15 (강한 유의) — 오히려 여성 우위.\n- 집계 격차는 학과 지원 분포의 교란(심슨의 역설)으로 확정.\n\n결론은 스테이징(엄밀 검증)을 통과. 배포 가능.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s4\nGil-Kind: success\nGil-Parent: s3"}]}]},"berkeley-deploy":{"x":490,"y":60,"cycles":[{"name":"c1","steps":2,"status":"success","here":false,"nodes":[{"id":"s1","kind":"define","outcome":"","parent":"null","backtrack":"","here":false,"sha":"d845736424b3982861d41e7c1b148f57ae5560e2","subj":"gil berkeley-deploy/c1/s1 define: 최종 리포트 봉인","body":"gil berkeley-deploy/c1/s1 define: 최종 리포트 봉인\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-deploy\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 최종 리포트 봉인"},{"id":"s2","kind":"success","outcome":"","parent":"s1","backtrack":"","here":false,"sha":"f2e332df761b42ccc1c9155a5309b1510a0a4b8c","subj":"gil berkeley-deploy/c1/s2 success: 최종 리포트 봉인: 재현 가능 (산 잎)","body":"gil berkeley-deploy/c1/s2 success: 최종 리포트 봉인: 재현 가능 (산 잎)\n\n# 최종 리포트 (봉인) — UC Berkeley 1973 입학과 심슨의 역설\n\n## 질문\n\"입학 과정이 여성을 차별했는가?\"\n\n## 답\n**아니다.** 집계 격차는 심슨의 역설이며, 학과 지원 분포 차이로 설명된다.\n\n## 근거 요약\n| 관점 | 여성 | 남성 | 판정 |\n|------|------|------|------|\n| 집계 합격률 | 30.4% | 44.5% | 표면상 여성 불리 |\n| 학과 층화 (4/6 학과) | 여성 ≥ 남성 | | 여성 불리 아님 |\n| 대형 학과 A z-test | 82.4% | 62.1% (z=+4.15) | 여성 유의 우위 |\n| 여성 유의 불리 학과 | — | — | **0개** |\n\n## 메커니즘\n남성은 합격률 높은 A(64%)·B(63%)에, 여성은 낮은 C(35%)·E(25%)·F(6%)에 집중 지원.\n집계는 이 자기선택을 성별 효과로 오인한다.\n\n## 재현\n```\npython3 analysis.py   # 모든 수치 재생성\n```\n데이터: `data/ucb_admissions.csv` · 그래프: `graph.html`\n\n*(Bickel, Hammel & O'Connell, Science 1975 재해석과 일치.)*\n\nGil-Chain: berkeley-deploy\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: success\nGil-Parent: s1"}]}]}}</script><script id="parentdata" type="application/json">{"berkeley-deploy":"berkeley-staging","berkeley-staging":"berkeley-dev"}</script><script id="dagdata" type="application/json">[{"sha":"f2e332df7","chain":"berkeley-deploy","cycle":"c1","step":"s2","kind":"success","outcome":"","here":false,"parents":["d84573642"],"subj":"gil berkeley-deploy/c1/s2 success: 최종 리포트 봉인: 재현 가능 (산 잎)","body":"gil berkeley-deploy/c1/s2 success: 최종 리포트 봉인: 재현 가능 (산 잎)\n\n# 최종 리포트 (봉인) — UC Berkeley 1973 입학과 심슨의 역설\n\n## 질문\n\"입학 과정이 여성을 차별했는가?\"\n\n## 답\n**아니다.** 집계 격차는 심슨의 역설이며, 학과 지원 분포 차이로 설명된다.\n\n## 근거 요약\n| 관점 | 여성 | 남성 | 판정 |\n|------|------|------|------|\n| 집계 합격률 | 30.4% | 44.5% | 표면상 여성 불리 |\n| 학과 층화 (4/6 학과) | 여성 ≥ 남성 | | 여성 불리 아님 |\n| 대형 학과 A z-test | 82.4% | 62.1% (z=+4.15) | 여성 유의 우위 |\n| 여성 유의 불리 학과 | — | — | **0개** |\n\n## 메커니즘\n남성은 합격률 높은 A(64%)·B(63%)에, 여성은 낮은 C(35%)·E(25%)·F(6%)에 집중 지원.\n집계는 이 자기선택을 성별 효과로 오인한다.\n\n## 재현\n```\npython3 analysis.py   # 모든 수치 재생성\n```\n데이터: `data/ucb_admissions.csv` · 그래프: `graph.html`\n\n*(Bickel, Hammel & O'Connell, Science 1975 재해석과 일치.)*\n\nGil-Chain: berkeley-deploy\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: success\nGil-Parent: s1"},{"sha":"d84573642","chain":"berkeley-deploy","cycle":"c1","step":"s1","kind":"define","outcome":"","here":false,"parents":["8b7b439bf"],"subj":"gil berkeley-deploy/c1/s1 define: 최종 리포트 봉인","body":"gil berkeley-deploy/c1/s1 define: 최종 리포트 봉인\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-deploy\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 최종 리포트 봉인"},{"sha":"8b7b439bf","chain":"berkeley-staging","cycle":"c1","step":"s4","kind":"success","outcome":"","here":false,"parents":["763d1f482"],"subj":"gil berkeley-staging/c1/s4 success: 견고성 확인: 배포 가능 (산 잎)","body":"gil berkeley-staging/c1/s4 success: 견고성 확인: 배포 가능 (산 잎)\n\n# 산 잎 — 결론 견고성 확인 (필드테스트 통과)\n\ndev 결론이 대형 학과 통계 검정에서 재현·강화됐다:\n- 여성이 **유의하게 불리한** 학과: **없음**.\n- Dept A: 여성 +20.3%p, z=+4.15 (강한 유의) — 오히려 여성 우위.\n- 집계 격차는 학과 지원 분포의 교란(심슨의 역설)으로 확정.\n\n결론은 스테이징(엄밀 검증)을 통과. 배포 가능.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s4\nGil-Kind: success\nGil-Parent: s3"},{"sha":"763d1f482","chain":"berkeley-staging","cycle":"c1","step":"s3","kind":"verify","outcome":"","here":false,"parents":["1f70dec45"],"subj":"gil berkeley-staging/c1/s3 verify: z-test: 여성 불리 유의 학과 0개, A는 여성 유의 우위","body":"gil berkeley-staging/c1/s3 verify: z-test: 여성 불리 유의 학과 0개, A는 여성 유의 우위\n\n# 검증 — Two-proportion z-test (여성 − 남성)\n\n`analysis.py`의 검정 확장. 대형 학과 A·B·C:\n\n| 학과 | 여성 (n) | 남성 (n) | z (F−M) | 유의성 |\n|------|----------|----------|---------|--------|\n| A | 82.4% (108) | 62.1% (825) | **+4.15** | 여성 유의 우위 (p<0.0001) |\n| B | 68.0% (25)  | 63.0% (560) | +0.50 | 차이 없음 |\n| C | 34.1% (593) | 36.9% (325) | −0.87 | 차이 없음 (유의하지 않음) |\n\n**여성이 유의하게 불리한 대형 학과는 없다.** 가장 큰 효과는 A의 *여성 우위*(+20%p, 강한 유의).\nC의 남성 근소 우위(−2.8%p)는 통계적으로 유의하지 않다 → 차별 근거 아님.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s3\nGil-Kind: verify\nGil-Parent: s2"},{"sha":"149952af5","chain":"berkeley-staging","cycle":"c1","step":"s1","kind":"define","outcome":"","here":false,"parents":["b2969c401"],"subj":"gil berkeley-staging/c1/s1 define: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현","body":"gil berkeley-staging/c1/s1 define: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 상위 대형 학과에서 성별 격차의 통계적 유의성 확인, 역설 재현"},{"sha":"1f70dec45","chain":"berkeley-staging","cycle":"c1","step":"s2","kind":"hypothesis","outcome":"","here":false,"parents":["149952af5"],"subj":"gil berkeley-staging/c1/s2 hypothesis: 대형 학과 유의성 검정으로 견고성 확인","body":"gil berkeley-staging/c1/s2 hypothesis: 대형 학과 유의성 검정으로 견고성 확인\n\n# 가설 — 대형 학과에서 역설이 재현되고, 여성 불리는 통계적으로 없다\n\ndev에서 나온 \"여성 불리 아님\" 결론이 표본 잡음이 아닌지, 지원자 수가 많은 대형 학과\n(A: 933명, C: 918명, B: 585명)에서 two-proportion z-test로 엄밀히 확인한다.\n\n**기대**: 여성이 유의하게 불리한 학과는 없다. 오히려 A에서 여성이 유의하게 우위.\n\nGil-Chain: berkeley-staging\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: hypothesis\nGil-Parent: s1"},{"sha":"b2969c401","chain":"berkeley-dev","cycle":"c1","step":"s9","kind":"success","outcome":"","here":false,"parents":["404d2f9e7"],"subj":"gil berkeley-dev/c1/s9 success: H2 지지: 심슨의 역설 (산 잎)","body":"gil berkeley-dev/c1/s9 success: H2 지지: 심슨의 역설 (산 잎)\n\n# 산 잎 — H2 지지: 성차별 아님, 심슨의 역설\n\n## 검증된 결론\nUC Berkeley 1973 입학의 집계 성별 격차(30.4% vs 44.5%)는 **성차별의 증거가 아니다.**\n학과로 층화하면 6개 중 4개에서 여성 합격률이 더 높다. 이는 심슨의 역설이며, 격차의\n원인은 지원 학과 분포 차이다.\n\n## 두 관점 요약\n| | 여성 | 남성 | 해석 |\n|---|---|---|---|\n| 집계 | 30.4% | 44.5% | 표면상 여성 불리 |\n| 층화 (4/6 학과) | ≥ | | 여성 불리 아님 |\n\n## 재현\n`python3 analysis.py` 로 위 모든 수치 재현 가능.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s9\nGil-Kind: success\nGil-Parent: s8"},{"sha":"404d2f9e7","chain":"berkeley-dev","cycle":"c1","step":"s8","kind":"analyze","outcome":"","here":false,"parents":["d37cb6e05"],"subj":"gil berkeley-dev/c1/s8 analyze: 심슨의 역설: 집계와 층화가 반대 방향","body":"gil berkeley-dev/c1/s8 analyze: 심슨의 역설: 집계와 층화가 반대 방향\n\n# 해석 — 심슨의 역설 (Simpson's Paradox)\n\n## 무슨 일이 일어났나\n- **집계**: 여성 30.4% < 남성 44.5% (여성 불리)\n- **층화**: 6개 중 4개 학과에서 여성 ≥ 남성 (여성 불리 아님)\n\n방향이 뒤집힌다. 이것이 교과서적 **심슨의 역설**이다.\n\n## 메커니즘\n합격률과 지원 성비가 학과와 동시에 상관된다.\n- 남성은 합격률 높은 A(64%)·B(63%)에 대량 지원(825, 560명).\n- 여성은 합격률 낮은 C(35%)·E(25%)·F(6%)에 집중 지원.\n\n집계는 이 지원 분포 차이를 \"성별 효과\"로 오인한다. 학과를 통제하면 사라진다.\n\n## 결론\n\"입학 과정이 여성을 차별했다\"는 집계 근거는 성립하지 않는다. 데이터가 시사하는 것은\n차별이 아니라 **여성이 경쟁이 치열한 학과에 더 많이 지원했다**는 구조적 사실이다.\n(이는 Bickel et al., Science 1975의 유명한 재해석과 일치한다.)\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s8\nGil-Kind: analyze\nGil-Parent: s7"},{"sha":"d37cb6e05","chain":"berkeley-dev","cycle":"c1","step":"s7","kind":"verify","outcome":"","here":false,"parents":["a14fd460f"],"subj":"gil berkeley-dev/c1/s7 verify: V2: 6개 중 4개 학과 여성 합격률이 더 높다","body":"gil berkeley-dev/c1/s7 verify: V2: 6개 중 4개 학과 여성 합격률이 더 높다\n\n# 검증 V2 — 학과별 층화 합격률\n\n`analysis.py` 층화 결과:\n\n| 학과 | 여성 합격률 | 남성 합격률 | 여성 우위? |\n|------|-------------|-------------|-----------|\n| A | **82.4%** | 62.1% | ✅ |\n| B | **68.0%** | 63.0% | ✅ |\n| C | 34.1% | 36.9% | ❌ |\n| D | **34.9%** | 33.1% | ✅ |\n| E | 23.9% | 27.7% | ❌ |\n| F | **7.0%** | 5.9% | ✅ |\n\n**6개 학과 중 4개에서 여성 합격률이 더 높다.** 남성이 우위인 C·E조차 격차는 작다(2~4%p).\n반면 여성 우위인 A는 20%p 이상 차이.\n\n집계에서 여성이 불리해 보인 이유: 여성이 합격률 낮은 학과(C·E·F)에 집중 지원했기 때문 —\n차별이 아니라 **지원 학과 선택의 차이**.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s7\nGil-Kind: verify\nGil-Parent: s6"},{"sha":"a14fd460f","chain":"berkeley-dev","cycle":"c1","step":"s6","kind":"hypothesis","outcome":"","here":false,"parents":["466e996e1"],"subj":"gil berkeley-dev/c1/s6 hypothesis: H2: 학과 층화 시 격차 역전 (backtrack)","body":"gil berkeley-dev/c1/s6 hypothesis: H2: 학과 층화 시 격차 역전 (backtrack)\n\n# 가설 H2 (backtrack) — 학과로 층화하면 격차가 사라지거나 역전된다\n\n조상 define(s2)로 되돌아와 새 가지를 뻗는다. H1의 실패에서 배운 것: 학과를 통제해야 한다.\n\n**주장**: 학과별로 층화해 성별 합격률을 비교하면, 여성이 불리하지 않다 —\n오히려 다수 학과에서 여성 합격률이 더 높다 (심슨의 역설).\n\n**검증 방법**: 6개 학과 각각에서 여성/남성 합격률을 계산하고, 여성 > 남성인 학과 수를 센다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s6\nGil-Kind: hypothesis\nGil-Parent: s2"},{"sha":"f09840deb","chain":"berkeley-dev","cycle":"c1","step":"s5","kind":"fail","outcome":"","here":false,"parents":["4352ed084"],"subj":"gil berkeley-dev/c1/s5 fail: H1 기각: 학과 교란 무시 (죽은 잎)","body":"gil berkeley-dev/c1/s5 fail: H1 기각: 학과 교란 무시 (죽은 잎)\n\n# 기각 — H1은 교란변수(학과)를 무시했다 (죽은 잎)\n\n## 왜 기각하는가\n집계 격차(30.4% vs 44.5%)는 **인과가 아니다**. 학과별 지원 분포를 통제하지 않았다.\n\n관찰: 학과마다 합격률이 극단적으로 다르다.\n\n| 학과 | 전체 합격률 |\n|------|-------------|\n| A | 64.4% |\n| B | 63.2% |\n| C | 35.1% |\n| D | 34.0% |\n| E | 25.2% |\n| F | **6.4%** |\n\n그리고 성별 지원 분포가 학과별로 크게 쏠린다:\n\n| 학과 | 여성 지원 | 남성 지원 |\n|------|-----------|-----------|\n| A (쉬움) | 108 | **825** |\n| B (쉬움) | 25 | **560** |\n| C | **593** | 325 |\n| E | **393** | 191 |\n| F (어려움) | 341 | 373 |\n\n남성은 합격률 높은 A·B에 몰렸고, 여성은 경쟁 심한 C·E·F에 몰렸다. 집계 격차는\n**\"여성이 어려운 학과에 더 많이 지원했다\"**는 자기선택으로 상당 부분 설명된다.\n\n## 결론\nH1(집계 격차 = 성차별)은 교란을 통제하지 못한 잘못된 추론. **기각 → 조상 define(s2)으로 backtrack.**\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s5\nGil-Kind: fail\nGil-Parent: s4\nGil-Backtrack: s2"},{"sha":"4352ed084","chain":"berkeley-dev","cycle":"c1","step":"s4","kind":"verify","outcome":"","here":false,"parents":["3a1895f7a"],"subj":"gil berkeley-dev/c1/s4 verify: V1: 여성 30.4% vs 남성 44.5% (집계)","body":"gil berkeley-dev/c1/s4 verify: V1: 여성 30.4% vs 남성 44.5% (집계)\n\n# 검증 V1 — 전체 집계 합격률\n\n`analysis.py` 집계 결과:\n\n| 성별 | 합격률 |\n|------|--------|\n| 여성 (Female) | **30.4%** |\n| 남성 (Male)   | **44.5%** |\n\n격차 = 14.1%p. 표면적으로 여성이 크게 불리해 보인다.\n\n```\nagg = df.groupby(\"Gender\").apply(lambda g: g.Admitted.sum()/g.Total.sum())\nFemale  0.304   Male  0.445\n```\n\n이 숫자만 보면 H1이 지지되는 듯하다. **그러나** 학과별 지원 분포를 아직 통제하지 않았다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s4\nGil-Kind: verify\nGil-Parent: s3"},{"sha":"3a1895f7a","chain":"berkeley-dev","cycle":"c1","step":"s3","kind":"hypothesis","outcome":"","here":false,"parents":["466e996e1"],"subj":"gil berkeley-dev/c1/s3 hypothesis: H1: 전체 합격률이 낮다 = 성차별","body":"gil berkeley-dev/c1/s3 hypothesis: H1: 전체 합격률이 낮다 = 성차별\n\n# 가설 H1 — 전체 합격률 격차 = 성차별\n\n**주장**: 여성의 전체 합격률이 남성보다 유의하게 낮다면, 이는 입학 과정의 성차별 증거다.\n\n**검증 방법**: 성별로 합격/불합격을 전부 합산해 합격률을 비교한다. 학과는 무시한다.\n\n**기각 조건**: 만약 이 격차가 학과라는 교란변수로 설명된다면, H1은 인과(\"차별\")를 지지하지 못한다.\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s3\nGil-Kind: hypothesis\nGil-Parent: s2"},{"sha":"466e996e1","chain":"berkeley-dev","cycle":"c1","step":"s2","kind":"define","outcome":"","here":false,"parents":["6ab1b4f64"],"subj":"gil berkeley-dev/c1/s2 define: 문제 정의: 성차별 검증, 두 관점","body":"gil berkeley-dev/c1/s2 define: 문제 정의: 성차별 검증, 두 관점\n\n# 문제 정의 — UC Berkeley 1973 입학에 성차별이 있었는가?\n\n## 무엇을 푸는가\n1973년 UC Berkeley 대학원 입학 데이터로 \"여성 지원자가 성별을 이유로 불리했는가?\"를 검증한다.\n\n## 입력 데이터 (`data/ucb_admissions.csv`)\n6개 학과(A–F) × 성별(Male/Female)의 합격/불합격 수. 총 12행.\n\n| 컬럼 | 의미 |\n|------|------|\n| Dept | 학과 A–F |\n| Gender | Male / Female |\n| Admitted | 합격 수 |\n| Rejected | 불합격 수 |\n\n## 평가 지표\n합격률 = Admitted / (Admitted + Rejected). 성별 간 격차를 본다.\n\n## 분석 관점 (두 갈래)\n- **관점 1 (집계)**: 성별 전체 합격률만 비교한다.\n- **관점 2 (층화)**: 학과별로 나눈 뒤 성별 합격률을 비교한다 (교란변수 통제).\n\n## 제약 / 주의\n학과는 잠재적 교란변수다. 지원 학과 분포가 성별로 다르면 집계 결과가 왜곡될 수 있다 (심슨의 역설 위험).\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s2\nGil-Kind: define\nGil-Parent: s1"},{"sha":"6ab1b4f64","chain":"berkeley-dev","cycle":"c1","step":"s1","kind":"define","outcome":"","here":false,"parents":[],"subj":"gil berkeley-dev/c1/s1 define: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다","body":"gil berkeley-dev/c1/s1 define: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다\n\n(문제 미기술 — 본문을 커밋 수정으로 채우라)\n\nGil-Chain: berkeley-dev\nGil-Cycle: c1\nGil-Step: s1\nGil-Kind: define\nGil-Parent: null\nGil-Cycle-Author: theseus\nGil-Cycle-Purpose: 전체 집계와 학과 층화 두 관점으로 성차별 가설을 검증한다"}]</script></main><script>
 const SVGNS='http://www.w3.org/2000/svg';
 const DATA=JSON.parse(document.getElementById('cycledata')?.textContent||'{}');
 const PARENTS=JSON.parse(document.getElementById('parentdata')?.textContent||'{}');
+const DAG=JSON.parse(document.getElementById('dagdata')?.textContent||'[]');
 let openChain=null;
 
 // 열린 카드 경로를 세션에 저장 — 폴링 리로드 후 복원해 카드가 닫히지 않게(피드백 1).
@@ -332,58 +340,70 @@ function openStepCard(chain,cyc){
   sc.hidden=false;
 }
 
-// lineage — 이 스텝의 지식 전파를 한 줄로: (들어오는) 부모 → [이 스텝] → 자식들 (나가는).
-// 부모/자식 칩은 클릭하면 그 스텝 보고서로 이동. 사이클 첫 스텝(define)이면 부모 체인을
-// "이어받음"으로 표시(체인 계보 = 이전 국면의 지식 상속).
+// lineage — 이 스텝의 지식 전파를 진짜 커밋 부모/자식으로: (들어옴) 부모 → [이 스텝] → 자식(낳음).
+// DAG(커밋 부모)를 써서 사이클·체인 경계를 넘는 전수도 보인다 — 부모 사이클/체인의 종결
+// 스텝에서 태어난 첫 스텝이면 그 부모 노드를 그대로 가리킨다. 칩 클릭 → 그 스텝 보고서로.
 function lineage(chain,cycle,n){
   const wrap=document.createElement('div');
   wrap.className='lineage';
-  const cyc=(DATA[chain]?.cycles||[]).find(c=>c.name===cycle);
-  const nodes=cyc?cyc.nodes:[];
-  const byId={}; nodes.forEach(x=>byId[x.id]=x);
-  const jump=(sid)=>{ const t=byId[sid]; if(t) openReport(chain,cycle,t); };
-  const chip=(label,cls,onclick,title)=>{
-    const s=document.createElement(onclick?'button':'span');
+  // DAG 에서 이 스텝 노드를 찾는다(sha 우선, 없으면 chain/cycle/step 로).
+  const self=DAG.find(d=>d.sha===n.sha)||DAG.find(d=>d.chain===chain&&d.cycle===cycle&&d.step===n.id);
+  const bySha={}; DAG.forEach(d=>bySha[d.sha]=d);
+  const chip=(label,cls,target,title)=>{
+    const s=document.createElement(target?'button':'span');
     s.className='lchip '+(cls||''); s.textContent=label;
     if(title)s.title=title;
-    if(onclick){ s.addEventListener('click',ev=>{ev.stopPropagation();onclick();}); }
+    if(target){ s.addEventListener('click',ev=>{ev.stopPropagation();jumpToNode(target);}); }
     return s;
   };
-  // 들어오는(부모).
+  // 다른 사이클/체인이면 라벨에 그 위치를 밝힌다(경계 넘는 전수를 드러냄).
+  const label=(d)=> (d.chain!==chain||d.cycle!==cycle) ? (d.chain+'/'+d.cycle+'/'+d.step+' '+d.kind) : (d.step+' '+d.kind);
+  const crossHint=(d)=> (d.chain!==chain) ? '부모 체인 '+d.chain+' 의 종결 스텝에서 이어받음'
+                      : (d.cycle!==cycle) ? '부모 사이클 '+d.cycle+' 의 스텝에서 이어받음' : '부모 스텝';
+  // 들어옴(부모들).
   wrap.appendChild(chip('들어옴','lhead'));
   const inbox=document.createElement('span'); inbox.className='lgroup';
-  const parent=(n.parent&&n.parent!=='null')?n.parent:null;
-  if(parent && byId[parent]){
-    inbox.appendChild(chip(parent+' '+byId[parent].kind,'lin',()=>jump(parent),'부모 스텝'));
-  }else if(n.id==='s1'){
-    // 사이클 첫 스텝 — 체인 계보(부모 체인)를 이어받음으로.
-    const pc=PARENTS[chain];
-    if(pc) inbox.appendChild(chip('체인 '+pc+' 에서 이어받음','lchain',null,'이전 국면(닫힌 부모 체인)의 대문·지식·판정을 상속'));
-    else inbox.appendChild(chip('시작점(대문에서)','lchain'));
+  const parents=(self&&self.parents||[]).map(p=>bySha[p]).filter(Boolean);
+  if(parents.length){
+    parents.forEach(p=>{
+      const cross=(p.chain!==chain||p.cycle!==cycle);
+      inbox.appendChild(chip(label(p),'lin'+(cross?' lchain':''),p,crossHint(p)));
+    });
   }else{
-    inbox.appendChild(chip('—','ldim'));
+    inbox.appendChild(chip('시작점(대문에서)','lchain',null,'이 체인의 첫 스텝 — 대문(루트)에서 시작'));
   }
   wrap.appendChild(inbox);
   // 이 스텝.
   wrap.appendChild(chip('→',''));
   wrap.appendChild(chip(n.id+' '+n.kind,'lself k-'+stepClass(n)));
   wrap.appendChild(chip('→',''));
-  // 나가는(자식들) — 같은 사이클에서 parent===n.id 인 스텝. backtrack 형제가지 포함.
+  // 낳음(자식들) — DAG 에서 parents 에 self.sha 를 포함하는 노드(경계 넘는 자식 포함).
   wrap.appendChild(chip('낳음','lhead'));
   const outbox=document.createElement('span'); outbox.className='lgroup';
-  const kids=nodes.filter(x=>x.parent===n.id);
+  const kids=self?DAG.filter(d=>d.parents.includes(self.sha)):[];
   if(kids.length){
-    kids.forEach(k=>outbox.appendChild(chip(k.id+' '+k.kind,'lout'+(k.parent!==prevOf(nodes,k)?' lbranch':''),()=>jump(k.id),
-      k.backtrack?'되돌아온 형제 가지':'다음 스텝')));
+    kids.forEach(k=>{
+      const cross=(k.chain!==chain||k.cycle!==cycle);
+      const branch=(k.parent&&k.parent!=='null'&&k.parent!==n.id); // backtrack 형제가지
+      outbox.appendChild(chip(label(k),'lout'+(branch?' lbranch':'')+(cross?' lchain':''),k,
+        cross?'자식 '+(k.chain!==chain?'체인 '+k.chain:'사이클 '+k.cycle)+' 이 여기서 이어받음':(branch?'되돌아온 형제 가지':'다음 스텝')));
+    });
   }else{
-    outbox.appendChild(chip(n.backtrack?'죽은 잎(벽) — 여기서 끝, ⤳'+n.backtrack+' 로 되돌아감':'잎(여기서 끝)','ldim',null,
-      n.backtrack?'이 가지는 여기서 죽고, 조상 define 으로 되돌아가 다른 가지를 폈다':''));
+    outbox.appendChild(chip(n.kind==='fail'?'죽은 잎(벽) — 여기서 끝':'잎(여기서 끝)','ldim',null,
+      n.kind==='fail'?'이 가지는 여기서 죽었다 — 조상 define 으로 되돌아가 다른 가지를 폈다':'이 사이클의 결말 노드'));
   }
   wrap.appendChild(outbox);
   return wrap;
 }
-// prevOf — nodes 배열에서 k 의 직전 스텝 id(선형 판정용). 없으면 ''.
-function prevOf(nodes,k){ const i=nodes.indexOf(k); return i>0?nodes[i-1].id:''; }
+// jumpToNode — DAG 노드 d 로 이동: 그 체인 선택 → 사이클 카드 → 스텝 보고서.
+function jumpToNode(d){
+  showView('chain'); selectChain(d.chain);
+  const cyc=DATA[d.chain]?.cycles.find(c=>c.name===d.cycle);
+  if(!cyc)return;
+  openStepCard(d.chain,cyc);
+  const sn=(cyc.nodes||[]).find(x=>x.id===d.step);
+  if(sn)openReport(d.chain,d.cycle,sn);
+}
 
 // 스텝 노드 클릭 → 그 스텝의 상세 보고서(커밋 본문 원문)를 /step 에서 가져와 카드로.
 async function openReport(chain,cycle,n){
@@ -527,42 +547,77 @@ function selectChain(chain){
   openCard(chain);
 }
 
-// 전체 스텝맵(피드백 4): 체인·사이클도 보이되 모든 스텝을 한 화면에 펼친다.
-// DATA(이미 로드됨)만으로 렌더 — 서버 왕복 없음. 스텝 클릭 → 그 보고서 카드.
+// 전체 스텝맵(피드백 4): 모든 스텝을 진짜 커밋 DAG(포도송이)로 — git 그래프처럼.
+// 실제 커밋 부모(DAG[].parents)로 노드를 잇는다. 사이클·체인 경계를 넘는 연결도 그대로.
+// 왼→오른쪽 시간 흐름(x=위상깊이), 분기는 레인(y)으로 겹치지 않게. 죽은 잎/산 잎/HEAD 표시.
 function buildStepMap(){
   const host=document.getElementById('view-map');
   host.replaceChildren();
-  for(const chain of Object.keys(DATA)){
-    const d=DATA[chain];
-    const ch=document.createElement('section'); ch.className='mapchain';
-    const pc=PARENTS[chain];
-    const h=document.createElement('div'); h.className='mapchain-h';
-    h.innerHTML='<span class="mapdot">●</span> 체인 <b>'+mdEsc(chain)+'</b>'+(pc?' <span class="mapfrom">← '+mdEsc(pc)+' 에서 이어받음</span>':'');
-    ch.appendChild(h);
-    for(const cy of d.cycles){
-      const cyd=document.createElement('div'); cyd.className='mapcyc';
-      const ch2=document.createElement('div'); ch2.className='mapcyc-h';
-      ch2.innerHTML='◆ 사이클 <b>'+mdEsc(cy.name)+'</b> <span class="mapstatus s-'+cy.status+'">'+cy.status+'</span>';
-      cyd.appendChild(ch2);
-      const row=document.createElement('div'); row.className='maprow';
-      (cy.nodes||[]).forEach((n,idx)=>{
-        if(idx>0){ const a=document.createElement('span'); a.className='maparrow';
-          a.textContent=(n.parent&&n.parent!==(cy.nodes[idx-1]?.id))?'⤴':'→'; row.appendChild(a); }
-        const s=document.createElement('button');
-        s.className='mapstep k-'+stepClass(n)+(n.here?' here':'');
-        s.innerHTML=mdEsc(n.id)+' <span class="mk">'+mdEsc(n.kind)+'</span>'+(n.here?' <span class="mhead">◀HEAD</span>':'');
-        s.title=n.subj||'';
-        s.addEventListener('click',()=>{ showView('chain'); selectChain(chain);
-          const cyc=DATA[chain].cycles.find(c=>c.name===cy.name);
-          openStepCard(chain,cyc); openReport(chain,cy.name,n); });
-        row.appendChild(s);
-      });
-      cyd.appendChild(row);
-      ch.appendChild(cyd);
+  if(!DAG.length){ host.textContent='아직 스텝이 없다.'; return; }
+  const byId={}; DAG.forEach(n=>byId[n.sha]=n);
+  // 자식 목록(부모→자식). depth(위상) 계산용.
+  const kids={}; DAG.forEach(n=>{ n.parents.forEach(p=>{ (kids[p]=kids[p]||[]).push(n.sha); }); });
+  // depth = 부모들의 max depth + 1 (부모 없으면 0). 커밋은 이미 시간 위상순이라 메모로 충분.
+  const depth={};
+  function dep(sha){ if(sha in depth)return depth[sha]; const n=byId[sha]; if(!n){return 0;}
+    let d=0; n.parents.forEach(p=>{ if(byId[p])d=Math.max(d,dep(p)+1); }); depth[sha]=d; return d; }
+  DAG.forEach(n=>dep(n.sha));
+  // 레인 배정(y): depth 오름차순으로 순회, 부모의 레인을 물려받되 이미 쓰였으면 새 레인.
+  const order=[...DAG].sort((a,b)=>depth[a.sha]-depth[b.sha]||0);
+  const lane={}; const laneBusyAt={}; // laneBusyAt[lane] = 그 레인을 마지막 점유한 depth
+  let maxLane=0;
+  order.forEach(n=>{
+    const d=depth[n.sha];
+    // 선호 레인 = 첫 부모의 레인(선형 연속성). 없으면 0.
+    let want=0; const gp=n.parents.filter(p=>byId[p]);
+    if(gp.length) want=lane[gp[0]]!==undefined?lane[gp[0]]:0;
+    // 그 레인이 이 depth 에서 비었나? 부모가 그 레인의 직전 점유자면 이어받기 OK.
+    let L=want;
+    const parentOwnsWant = gp.some(p=>lane[p]===want);
+    if(!parentOwnsWant || (laneBusyAt[want]!==undefined && laneBusyAt[want]>=d)){
+      // 자리 다툼 → 빈 레인 찾기.
+      L=0; while(laneBusyAt[L]!==undefined && laneBusyAt[L]>=d) L++;
     }
-    host.appendChild(ch);
-  }
+    lane[n.sha]=L; laneBusyAt[L]=d; if(L>maxLane)maxLane=L;
+  });
+  // 좌표.
+  const colW=118, rowH=54, padX=40, padY=34, r=15;
+  let maxD=0; DAG.forEach(n=>{ if(depth[n.sha]>maxD)maxD=depth[n.sha]; });
+  const W=padX*2+maxD*colW+r*2, H=padY*2+maxLane*rowH+r*2;
+  const X=sha=>padX+r+depth[sha]*colW, Y=sha=>padY+r+lane[sha]*rowH;
+  const svg=svgEl('svg',{class:'dag',viewBox:'0 0 '+W+' '+H,width:W,height:H});
+  // 엣지(부모→자식) 먼저. backtrack 형제가지 = 트레일러 부모(n.parent)가 이 커밋부모의
+  // step 과 달라 조상 define 으로 되돌아간 경우 → 빨강 파선.
+  DAG.forEach(n=>{ n.parents.forEach(p=>{ if(!byId[p])return;
+    const x1=X(p),y1=Y(p),x2=X(n.sha),y2=Y(n.sha);
+    const branch=n.parent&&n.parent!=='null'&&byId[p].step!==n.parent;
+    const cls='dedge'+(branch?' branch':'');
+    const mx=(x1+x2)/2;
+    svg.appendChild(svgEl('path',{class:cls,fill:'none',d:'M '+x1+' '+y1+' C '+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2}));
+  }); });
+  // 노드.
+  DAG.forEach(n=>{
+    const g=svgEl('g',{class:'dnode k-'+stepClass(n)+(n.here?' here':'')+(isLeaf(n,kids)?' leaf':''),transform:'translate('+X(n.sha)+','+Y(n.sha)+')'});
+    g.appendChild(svgEl('title',{},n.chain+'/'+n.cycle+'/'+n.step+' '+n.kind+'\n'+n.subj));
+    g.appendChild(svgEl('circle',{r:r}));
+    g.appendChild(svgEl('text',{class:'dsid',dy:3},n.step));
+    g.appendChild(svgEl('text',{class:'dlabel',dy:r+13},n.chain+'/'+n.cycle));
+    if(n.here){ g.appendChild(svgEl('text',{class:'headlbl',dy:-r-9},'HEAD'));
+      g.appendChild(svgEl('path',{class:'headarrow',d:'M 0 '+(-r-6)+' l -5 -8 l 10 0 z'})); }
+    g.addEventListener('click',()=>{ showView('chain'); selectChain(n.chain);
+      const cyc=DATA[n.chain].cycles.find(c=>c.name===n.cycle);
+      if(cyc){ openStepCard(n.chain,cyc);
+        const sn=(cyc.nodes||[]).find(x=>x.id===n.step); if(sn)openReport(n.chain,n.cycle,sn); } });
+    svg.appendChild(g);
+  });
+  const wrap=document.createElement('div'); wrap.className='dagwrap'; wrap.appendChild(svg);
+  host.appendChild(wrap);
+  const leg=document.createElement('p'); leg.className='hint';
+  leg.innerHTML='진짜 커밋 그래프 — 모든 스텝이 부모 커밋으로 이어진다. <b class="lg-branch">빨강 파선</b>=backtrack 분기, <b class="lg-dead">붉은 노드</b>=죽은 잎(벽), <b class="lg-alive">초록 테두리</b>=산 잎(사이클 결말). 노드 클릭 → 보고서.';
+  host.appendChild(leg);
 }
+// isLeaf — 이 노드를 부모로 삼는 gil 스텝이 없으면 잎(사이클 결말: 산 잎 or 죽은 잎).
+function isLeaf(n,kids){ return !(kids[n.sha]&&kids[n.sha].length); }
 function showView(which){
   const chainOn=which==='chain';
   document.getElementById('view-chain').hidden=!chainOn;
