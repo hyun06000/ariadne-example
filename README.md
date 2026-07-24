@@ -38,5 +38,5 @@
 python3 analysis.py        # data/ucb_admissions.csv 로 전체 분석 재현
 ```
 
-그래프는 `gil viewer build --out graph.html` 로 재생성됩니다.
+그래프는 `gil viewer build --out index.html` 로 재생성됩니다.
 저술자: **Theseus** (오토모드 서브에이전트, `AGENT.md` 참조).
